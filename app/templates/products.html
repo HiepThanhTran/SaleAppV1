@@ -1,0 +1,44 @@
+{% extends 'layout/base.html' %}
+
+{% block title %} Tất cả sản phẩm {% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            {% if pages > 0 %}
+                <ul class="pagination justify-content-center" style="padding-top: 15px;">
+                    <li class="page-item {% if request.args.page|int == 1 %} disabled {% endif %}">
+                        <a class="page-link" href="{{ url_for('products_list', page=request.args.page|int - 1) }}">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    </li>
+                    {% for page in range(1, pages + 1) %}
+                        <li class="page-item {% if request.args.page|int == page %} active {% endif %}"><a class="page-link" href="{{ url_for('products_list', page=page) }}">{{ page }}</a></li>
+                    {% endfor %}
+                    <li class="page-item {% if request.args.page|int == pages %} disabled {% endif %}">
+                        <a class="page-link" href="{{ url_for('products_list', page=request.args.page|int + 1) }}">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            {% endif %}
+            <div class="row">
+                {% for p in products %}
+                    <div class="col-xs-12 col-md-3" style="padding: 5px;">
+                        <div class="card">
+                            <a href="{{ url_for('product_detail', product_id=p.id) }}">
+                                <img class="card-img-top" src="{{ p.image }}" alt="{{ p.name }}">
+                            </a>
+                            <div class="card-body">
+                                <h4 class="card-title">{{ p.name }}</h4>
+                                <p class="card-text">{{ "{:,}".format(p.price) }} VNĐ</p>
+                                <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                                <a href="#" class="btn btn-danger">Đặt hàng</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
